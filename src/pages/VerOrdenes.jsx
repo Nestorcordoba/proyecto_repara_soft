@@ -3,6 +3,19 @@ import React, { useEffect, useState } from 'react';
 export default function VerOrdenes() {
   const [ordenes, setOrdenes] = useState([]);
 
+  useEffect(() => {
+    const data = localStorage.getItem("ordenes");
+    if (data) {
+      setOrdenes(JSON.parse(data));
+    }
+  }, []);
+
+  const ordenesOrdenadas = [...ordenes].sort((a, b) => {
+  const fechaA = new Date(a.fecha);
+  const fechaB = new Date(b.fecha);
+  return fechaB - fechaA; // Descendente: más reciente primero
+});
+
   const actualizarComentario = (id, nuevoComentario) => {
     const actualizadas = ordenes.map(orden =>
       orden.id === id ? { ...orden, comentario: nuevoComentario } : orden
@@ -11,12 +24,7 @@ export default function VerOrdenes() {
     localStorage.setItem("ordenes", JSON.stringify(actualizadas));
   };
 
-  useEffect(() => {
-    const data = localStorage.getItem("ordenes");
-    if (data) {
-      setOrdenes(JSON.parse(data));
-    }
-  }, []);
+  
 
 
   const eliminarOrden = (id) => {
@@ -73,9 +81,9 @@ export default function VerOrdenes() {
         <p className="text-gray-600">No hay órdenes registradas.</p>
       ) : (
         <div className="space-y-4">
-          {ordenes.map((orden, idx) => (
+          {ordenesOrdenadas.map((orden, idx) => (
             <div key={orden.id} className={`${idx % 2 === 0 ? 'orden-par' : 'orden-impar'}`}>
-              <Row label="#" value={idx + 1} />
+              <Row label="#" value={orden.id} />
               <Row label="Fecha" value={orden.fecha} />
               <Row label="Cliente" value={orden.cliente.nombre} />
               <Row label="DNI" value={orden.cliente.dni} />
@@ -113,10 +121,6 @@ export default function VerOrdenes() {
   />
   
 </div>
-
-
-              
-
 
               <Row label="Ítems" value={orden.items.length} />
               {orden.items.length > 0 && (
@@ -206,6 +210,13 @@ const imprimirOrden = (orden, numero) => {
   ventana.document.close();
   ventana.focus();
   ventana.print();
+
+  const ordenesOrdenadas = [...ordenes].sort((a, b) => {
+  const fechaA = new Date(a.fecha);
+  const fechaB = new Date(b.fecha);
+  return fechaB - fechaA; // Descendente: más reciente primero
+});
+
 };
 
 
