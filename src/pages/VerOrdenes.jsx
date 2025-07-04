@@ -153,13 +153,13 @@ export default function VerOrdenes() {
                   className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
                 >
                   Eliminar
-                </button>
-                <button
-  onClick={() => imprimirOrden(orden, idx + 1)}
-  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-xs mt-2"
->
-  Imprimir Orden
-</button>
+                  </button>
+                      <button
+                       onClick={() => imprimirOrden(orden)}
+                      className="..."
+                  >
+                  Imprimir Orden
+                 </button>
 
               </div>
             </div>
@@ -172,7 +172,7 @@ export default function VerOrdenes() {
   );
   
 }
-const imprimirOrden = (orden, numero) => {
+const imprimirOrden = (orden) => {
   const logoUrl = "/logo-setip.png"; // asegúrate que el logo esté en /public
   const itemsHtml = orden.items?.map(item => `
     <div class="item">
@@ -187,7 +187,7 @@ const imprimirOrden = (orden, numero) => {
 
   const html = `
     ${document.getElementById("print-template").innerHTML}
-  `.replace("{numero}", numero)
+  `.replace("{numero}", orden.id)
    .replace("{fecha}", orden.fecha)
    .replace("{cliente}", orden.cliente.nombre || "")
    .replace("{dni}", orden.cliente.dni || "")
